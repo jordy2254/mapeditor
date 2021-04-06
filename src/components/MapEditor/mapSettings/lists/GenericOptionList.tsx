@@ -4,18 +4,18 @@ import {getCurrentUserMaps} from "../../../../api/map";
 import {useAuth0} from "../../../../react-auth0-spa";
 import {MainEditorState} from "../../MapEditor";
 
-type Props = {
+type Props<T> = {
     elems: any[]
     idKey: keyof any
     stringFunction: (value:any) => string
-    updateKey: keyof MainEditorState
+    updateKey: keyof T
     listTitle:string
-    mainEditorState: MainEditorState
-    updateEditorState: (mainEditorState: MainEditorState) => void
+    existingState: T
+    updateState: (state: T) => void
     addMutationKey: string
 }
 
-const GenericMainEditorStateOptionsList:React.FC<Props> = ({elems, idKey, stringFunction, updateKey, listTitle, mainEditorState, updateEditorState, addMutationKey}) =>{
+const GenericOptionList: <T extends object>(p: Props<T>) => React.ReactElement<Props<T>> = ({elems, idKey, stringFunction, updateKey, listTitle, existingState, updateState, addMutationKey}) =>{
     const createOption = (elem: any) =>{
         return <option key={addMutationKey.toString() + ":" + idKey.toString() + elem[idKey]}value={elem[idKey]}>{stringFunction(elem)}</option>
     }
@@ -31,7 +31,7 @@ const GenericMainEditorStateOptionsList:React.FC<Props> = ({elems, idKey, string
             <h1>{listTitle}</h1>
             <div className={"settingsListContainer"}>
                 <select className={"settingsList"} id={addMutationKey} multiple={true} onChange={event=>{
-                    updateEditorState({...mainEditorState, [updateKey]:(parseInt(event.target.value))})
+                    updateState({...existingState, [updateKey]:(parseInt(event.target.value))})
                 }}>
                     {elems.map(value =>{
                         return createOption(value)
@@ -44,47 +44,47 @@ const GenericMainEditorStateOptionsList:React.FC<Props> = ({elems, idKey, string
 }
 
 export function createBuildingList(buildings:Building[], mainEditorState:MainEditorState, updateEditorState:(newState:MainEditorState)=>void){
-    return <GenericMainEditorStateOptionsList key={mainEditorState.selectedBuildingId} elems={buildings}
+    return <GenericOptionList<MainEditorState> key={mainEditorState.selectedBuildingId} elems={buildings}
                                               idKey={"id"}
                                               stringFunction={b =>{return b.buildingName}}
                                               updateKey={"selectedBuildingId"}
                                               listTitle={"Building List"}
-                                              mainEditorState={mainEditorState}
-                                              updateEditorState={updateEditorState}
+                                              existingState={mainEditorState}
+                                              updateState={updateEditorState}
                                               addMutationKey={"AddBuilding"}/>
 }
 
 export function createFloorList(floors:Floor[], mainEditorState:MainEditorState, updateEditorState:(newState:MainEditorState)=>void){
-    return <GenericMainEditorStateOptionsList key={mainEditorState.selectedFloorId} elems={floors.sort((a, b) => a.floorNumber - b.floorNumber)}
+    return <GenericOptionList<MainEditorState> key={mainEditorState.selectedFloorId} elems={floors.sort((a, b) => a.floorNumber - b.floorNumber)}
                                               idKey={"id"}
                                               stringFunction={floor =>{return floor.floorNumber + ' | ' + floor.floorName}}
                                               updateKey={"selectedFloorId"}
                                               listTitle={"Floor List"}
-                                              mainEditorState={mainEditorState}
-                                              updateEditorState={updateEditorState}
+                                               existingState={mainEditorState}
+                                               updateState={updateEditorState}
                                               addMutationKey={"AddFloor"}/>
 }
 
 export function createRoomList(rooms:Room[], mainEditorState:MainEditorState, updateEditorState:(newState:MainEditorState)=>void){
-    return <GenericMainEditorStateOptionsList key={mainEditorState.selectedRoomId} elems={rooms}
+    return <GenericOptionList<MainEditorState> key={mainEditorState.selectedRoomId} elems={rooms}
                                               idKey={"id"}
                                               stringFunction={b =>{return b.name}}
                                               updateKey={"selectedRoomId"}
                                               listTitle={"Room List"}
-                                              mainEditorState={mainEditorState}
-                                              updateEditorState={updateEditorState}
+                                               existingState={mainEditorState}
+                                               updateState={updateEditorState}
                                               addMutationKey={"AddRoom"}/>
 }
 
 export function createSensorList(sensors:Sensor[], mainEditorState:MainEditorState, updateEditorState:(newState:MainEditorState)=>void){
-    return <GenericMainEditorStateOptionsList key={mainEditorState.selectedSensorId} elems={sensors}
+    return <GenericOptionList<MainEditorState> key={mainEditorState.selectedSensorId} elems={sensors}
                                               idKey={"id"}
                                               stringFunction={b =>{return b.id}}
                                               updateKey={"selectedSensorId"}
                                               listTitle={"Sensor List"}
-                                              mainEditorState={mainEditorState}
-                                              updateEditorState={updateEditorState}
+                                               existingState={mainEditorState}
+                                               updateState={updateEditorState}
                                               addMutationKey={"AddSensor"}/>
 }
 
-export default GenericMainEditorStateOptionsList;
+export default GenericOptionList;

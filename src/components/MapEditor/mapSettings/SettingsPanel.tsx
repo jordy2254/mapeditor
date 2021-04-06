@@ -3,7 +3,7 @@ import BuildingOptions from "./options/BuildingOptions";
 import FloorOptions from "./options/FloorOptions";
 import {MainEditorState} from "../MapEditor";
 import RoomOptions from "./options/RoomOptions";
-import GenericMainEditorStateOptionsList, {createBuildingList, createFloorList, createRoomList, createSensorList} from "./lists/GenericMainEditorStateOptionsList";
+import GenericOptionList, {createBuildingList, createFloorList, createRoomList, createSensorList} from "./lists/GenericOptionList";
 import * as Url from "url";
 
 type Props = {
