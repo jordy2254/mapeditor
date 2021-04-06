@@ -80,7 +80,7 @@ const MapCanvas:React.FC<Props> = ({map, mainEditorState, updateEditorState}) =>
                 render(context, map, mainEditorState, canvasState)
             }
         }
-    }, [canvasState, map]);
+    }, [canvasState, mainEditorState, map]);
 
     const handleCanvasMouseDown = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
         canvasState.selectedTool?.mousePress(event);

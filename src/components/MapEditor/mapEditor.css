@@ -57,7 +57,12 @@ html, body, #root, .App, .editorContainer{
     top: 20px;
     left:20px;
     width:100px;
-    height:100px;
+    padding:20px;
+}
+
+.editorContainer .canvasContainer .canvasToolbox button{
+    margin-top:10px;
+    width:100%;
 }
 
 .floorIndexesContainer{

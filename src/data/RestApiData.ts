@@ -3,6 +3,11 @@ export type Point2f = {
     y: number
 }
 
+export type Pair2f = {
+    fst: Point2f
+    snd: Point2f
+}
+
 export type Map = {
     id: number
     password: string
@@ -18,6 +23,11 @@ export type Building = {
     buildingName: string
     location: Point2f
     floors: Floor[]
+}
+export type Entrance = {
+    id:        number
+    start: Point2f
+    end: Point2f
 }
 
 export type Floor = {
@@ -41,6 +51,9 @@ export type Room = {
     location: Point2f
     dimensions: Point2f
     indents: Indent[]
+    polygon: Point2f[]
+    walls: Pair2f[]
+    entrances:  Entrance[]
 }
 
 export type Indent = {

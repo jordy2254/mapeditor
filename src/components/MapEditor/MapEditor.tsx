@@ -6,8 +6,9 @@ import {
     getCurrentUserMapById,
     getCurrentUserMaps,
     updateBuilding, updateFloor, updateMap, updateRoom
-} from "../../api/map";
-import {useAuth0} from "../../react-auth0-spa";
+} from "api/map";
+
+import {useAuth0} from "react-auth0-spa";
 import MapCanvas from "./canvas/MapCanvas";
 import Header from "./Header";
 import "./mapEditor.css"
@@ -48,7 +49,7 @@ const MapEditor:React.FC<Props> = ({selectedMapId, handleClearSelectedMap}) =>{
 
     const {isLoading, error, data: mapData} = useQuery<Map>('API', () => tokenWrapper(getCurrentUserMapById, selectedMapId));
     const [mainEditorState, setMainEditorState] = useState(defaultState as MainEditorState);
-
+        console.log(mapData)
     const tokenWrapper2 = async (t: (token: any, mapId:any, buildingId:any) => any, mapId:any, buildingId:any) => {
         const token = await getTokenSilently()
         return await t(token, mapId, buildingId)
