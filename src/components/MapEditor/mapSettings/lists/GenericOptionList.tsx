@@ -4,7 +4,7 @@ import {getCurrentUserMaps} from "../../../../api/map";
 import {useAuth0} from "../../../../react-auth0-spa";
 import {MainEditorState} from "../../MapEditor";
 
-type Props<T> = {
+type Props<T extends object> = {
     elems: any[]
     idKey: keyof any
     stringFunction: (value:any) => string
