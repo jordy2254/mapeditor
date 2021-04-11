@@ -1,11 +1,12 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {Map} from "../../data/RestApiData";
 import {
+    createIndent,
     createNewBuilding,
-    createNewFloor, createNewRoom,
+    createNewFloor, createNewRoom, deleteIndent,
     getCurrentUserMapById,
     getCurrentUserMaps,
-    updateBuilding, updateFloor, updateMap, updateRoom
+    updateBuilding, updateFloor, updateIndent, updateMap, updateRoom
 } from "api/map";
 
 import {useAuth0} from "react-auth0-spa";
@@ -59,6 +60,12 @@ const MapEditor:React.FC<Props> = ({selectedMapId, handleClearSelectedMap}) =>{
         const token = await getTokenSilently()
         return await t(token, mapId, buildingId, floorId)
     }
+
+    const tokenWrapper4 = async (t: (token: any, indent:any) => any,indent:any) => {
+        const token = await getTokenSilently()
+        return await t(token, indent)
+    }
+
     queryClient.setMutationDefaults("EditMap", {
         mutationFn: map => tokenWrapper(updateMap, map),
         onSuccess: (data, variables, context) => {
@@ -101,6 +108,28 @@ const MapEditor:React.FC<Props> = ({selectedMapId, handleClearSelectedMap}) =>{
             queryClient.invalidateQueries('API')
         }
     })
+
+    queryClient.setMutationDefaults("EditIndent", {
+        mutationFn: indent => tokenWrapper4(updateIndent, indent),
+        onSuccess: (data, variables, context) => {
+            queryClient.invalidateQueries('API')
+        }
+    })
+
+    queryClient.setMutationDefaults("AddIndent", {
+        mutationFn: () => tokenWrapper4(createIndent, mainEditorState.selectedRoomId),
+        onSuccess: (data, variables, context) => {
+            queryClient.invalidateQueries('API')
+        }
+    })
+
+    queryClient.setMutationDefaults("DeleteIndent", {
+        mutationFn: indentId => tokenWrapper4(deleteIndent, indentId),
+        onSuccess: (data, variables, context) => {
+            queryClient.invalidateQueries('API')
+        }
+    })
+
 
     if(isLoading || mapData === undefined){
         return <div>Loading...</div>

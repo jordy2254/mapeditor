@@ -13,17 +13,23 @@ type Props<T extends object> = {
     existingState: T
     updateState: (state: T) => void
     addMutationKey: string
+    deleteMutationKey: string
 }
 
-const GenericOptionList: <T extends object>(p: Props<T>) => React.ReactElement<Props<T>> = ({elems, idKey, stringFunction, updateKey, listTitle, existingState, updateState, addMutationKey}) =>{
+const GenericOptionList: <T extends object>(p: Props<T>) => React.ReactElement<Props<T>> = ({elems, idKey, stringFunction, updateKey, listTitle, existingState, updateState, addMutationKey, deleteMutationKey}) =>{
     const createOption = (elem: any) =>{
         return <option key={addMutationKey.toString() + ":" + idKey.toString() + elem[idKey]}value={elem[idKey]}>{stringFunction(elem)}</option>
     }
 
-    const mute = useMutation(addMutationKey);
+    const addMutation = useMutation(addMutationKey);
+    const deleteMutation = useMutation(deleteMutationKey);
 
     const add = () =>{
-        mute.mutate();
+        addMutation.mutate();
+    }
+
+    const del = (id: any) =>{
+        deleteMutation.mutate(id);
     }
 
     return (
@@ -51,7 +57,8 @@ export function createBuildingList(buildings:Building[], mainEditorState:MainEdi
                                               listTitle={"Building List"}
                                               existingState={mainEditorState}
                                               updateState={updateEditorState}
-                                              addMutationKey={"AddBuilding"}/>
+                                              addMutationKey={"AddBuilding"}
+                                               deleteMutationKey={""}/>
 }
 
 export function createFloorList(floors:Floor[], mainEditorState:MainEditorState, updateEditorState:(newState:MainEditorState)=>void){
@@ -62,7 +69,8 @@ export function createFloorList(floors:Floor[], mainEditorState:MainEditorState,
                                               listTitle={"Floor List"}
                                                existingState={mainEditorState}
                                                updateState={updateEditorState}
-                                              addMutationKey={"AddFloor"}/>
+                                              addMutationKey={"AddFloor"}
+    deleteMutationKey={""}/>
 }
 
 export function createRoomList(rooms:Room[], mainEditorState:MainEditorState, updateEditorState:(newState:MainEditorState)=>void){
@@ -73,7 +81,8 @@ export function createRoomList(rooms:Room[], mainEditorState:MainEditorState, up
                                               listTitle={"Room List"}
                                                existingState={mainEditorState}
                                                updateState={updateEditorState}
-                                              addMutationKey={"AddRoom"}/>
+                                              addMutationKey={"AddRoom"}
+                                               deleteMutationKey={""}/>
 }
 
 export function createSensorList(sensors:Sensor[], mainEditorState:MainEditorState, updateEditorState:(newState:MainEditorState)=>void){
@@ -84,7 +93,8 @@ export function createSensorList(sensors:Sensor[], mainEditorState:MainEditorSta
                                               listTitle={"Sensor List"}
                                                existingState={mainEditorState}
                                                updateState={updateEditorState}
-                                              addMutationKey={"AddSensor"}/>
+                                              addMutationKey={"AddSensor"}
+                                               deleteMutationKey={""}/>
 }
 
 export default GenericOptionList;

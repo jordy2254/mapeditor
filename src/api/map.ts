@@ -1,5 +1,5 @@
 import apiConfig from "config/apiconfig.json"
-import {Building, Floor, Room, Map} from "../data/RestApiData";
+import {Building, Floor, Room, Map, Indent} from "../data/RestApiData";
 
 export async function getCurrentUserMaps(token:any) {
     return await (await fetch(apiConfig.domain + "/maps", {
@@ -92,8 +92,8 @@ export async function updateFloor(token:any, building:Floor) {
     })).json()
 }
 
-export async function createNewRoom(token:any, mapId:number, buildingId:number, floorId:number) {
-    let b:Room = <Room>{mapId:mapId,  buildingId:buildingId, floorId:floorId, name:"Unnamed", location:{x:0, y:0}, dimensions:{x:0, y:0}}
+export async function createNewRoom(token:any, floorId:number) {
+    let b:Room = <Room>{floorId:floorId, name:"Unnamed", location:{x:0, y:0}, dimensions:{x:0, y:0}}
 
     return await (await fetch(apiConfig.domain + "/Rooms/"  + floorId, {
         method: 'POST',
@@ -113,5 +113,39 @@ export async function updateRoom(token:any, room:Room) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(room)
+    })).json()
+}
+
+export async function updateIndent(token:any, indent:Indent) {
+    return await (await fetch(apiConfig.domain + "/Indents/" + indent.id, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(indent)
+    })).json()
+}
+
+export async function createIndent(token:any, roomId:any) {
+    console.log(roomId)
+    let b:Indent = <Indent>{wallKeyA:"TOP", wallKeyB:"LEFT", dimensions:{x:0, y:0}, roomId:roomId}
+    return await (await fetch(apiConfig.domain + "/Indents", {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(b)
+    })).json()
+}
+
+export async function deleteIndent(token:any, indentId:any) {
+    return await (await fetch(apiConfig.domain + "/Indents/"+indentId, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
     })).json()
 }

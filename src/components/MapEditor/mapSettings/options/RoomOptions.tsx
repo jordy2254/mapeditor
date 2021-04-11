@@ -3,6 +3,7 @@ import {ChangeEvent, useEffect, useState} from "react";
 import {useMutation} from "react-query";
 import PointOptions from "./PointOptions";
 import GenericOptionList from "../lists/GenericOptionList";
+import IndentOptions from "./IndentOptions";
 
 type Props = {
     room: Room
@@ -72,13 +73,6 @@ const RoomOptions:React.FC<Props> = ({room}) =>{
             <PointOptions point={state.room.location} prefix={"Location"} callback={handleLocationChange}/>
             <PointOptions point={state.room.dimensions} prefix={"Dimensions"} callback={handleDimensionChange}/>
 
-            <div>
-
-                {room.indents.map(value =>{
-                    return <div>{buildIndentString(value)}</div>
-                })}
-
-            </div>
             <GenericOptionList<RoomOptionsState> elems={room.indents}
                                                  idKey={"id"}
                                                  stringFunction={buildIndentString}
@@ -86,7 +80,10 @@ const RoomOptions:React.FC<Props> = ({room}) =>{
                                                  listTitle={"Indents"}
                                                  existingState={state}
                                                  updateState={setState}
-                                                 addMutationKey={""}/>
+                                                 addMutationKey={"AddIndent"}
+                                                 deleteMutationKey={"DeleteIndent"}/>
+
+            {state.selectedIndentId !== -1 && <IndentOptions key={state.selectedIndentId} indent={room.indents.filter(value => value.id === state.selectedIndentId)[0]}/>}
         </div>
     );
 }

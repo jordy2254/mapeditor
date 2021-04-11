@@ -44,8 +44,6 @@ export type Floor = {
 export type Room = {
     id: number
     floorId: number
-    mapId: number
-    buildingId: number
     rotation: number
     name: string
     location: Point2f
@@ -59,9 +57,6 @@ export type Room = {
 export type Indent = {
     id: number
     roomId: number
-    mapId: number
-    buildingId: number
-    floorId: number
     wallKeyA: string
     wallKeyB: string
     location: number
@@ -70,7 +65,7 @@ export type Indent = {
 
 export type Sensor = {
     id: string
-    buildingId: number
+    sensorId: string
     floorId: number
     location: Point2f
 }
