@@ -3,6 +3,7 @@ import {useMutation, useQueryClient} from "react-query";
 import {getCurrentUserMaps} from "../../../../api/map";
 import {useAuth0} from "../../../../react-auth0-spa";
 import {MainEditorState} from "../../MapEditor";
+import {useState} from "react";
 
 type Props<T extends object> = {
     elems: any[]
@@ -17,8 +18,11 @@ type Props<T extends object> = {
 }
 
 const GenericOptionList: <T extends object>(p: Props<T>) => React.ReactElement<Props<T>> = ({elems, idKey, stringFunction, updateKey, listTitle, existingState, updateState, addMutationKey, deleteMutationKey}) =>{
+
+    const [selectedIds, setSelectedId] = useState([] as any[])
+
     const createOption = (elem: any) =>{
-        return <option key={addMutationKey.toString() + ":" + idKey.toString() + elem[idKey]}value={elem[idKey]}>{stringFunction(elem)}</option>
+        return <option key={addMutationKey.toString() + ":" + idKey.toString() + elem[idKey]} value={elem[idKey]} selected={selectedIds.filter(value => value === elem[idKey]).length > 0}>{stringFunction(elem)}</option>
     }
 
     const addMutation = useMutation(addMutationKey);
@@ -28,23 +32,24 @@ const GenericOptionList: <T extends object>(p: Props<T>) => React.ReactElement<P
         addMutation.mutate();
     }
 
-    const del = (id: any) =>{
-        deleteMutation.mutate(id);
+    const del = () =>{
+        deleteMutation.mutate(selectedIds[0]);
     }
 
     return (
-        <div>
+        <div key={listTitle}>
             <h1>{listTitle}</h1>
             <div className={"settingsListContainer"}>
-                <select className={"settingsList"} id={addMutationKey} multiple={true} onChange={event=>{
-                    updateState({...existingState, [updateKey]:(parseInt(event.target.value))})
+                <select className={"settingsList"} id={addMutationKey} multiple={true} onChange={event=>setSelectedId(Array.from(event.target.selectedOptions).map(value => value.value))} onDoubleClick={event=>{
+                    updateState({...existingState, [updateKey]:(parseInt(event.currentTarget.value))})
                 }}>
                     {elems.map(value =>{
                         return createOption(value)
                     })}
                 </select>
             </div>
-            <button onClick={add}>Add</button> <button>delete</button>
+            {addMutation !== undefined && <button onClick={add}>Add</button>}
+            {deleteMutation !== undefined && <button onClick={() => del()}>delete</button>}
         </div>
     );
 }

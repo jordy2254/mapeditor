@@ -110,6 +110,17 @@ function renderMap(ctx:CanvasRenderingContext2D, map:Map, mainEditorState:MainEd
             renderRoomPoly(floor, building, canvasState, ctx, renderPoints, mainEditorState);
             renderRoomWalls(floor, building, canvasState, ctx, renderPoints, mainEditorState);
             renderSelectedRoom(floor, building, canvasState, ctx, renderPoints, mainEditorState)
+            if(floor.sensors != undefined){
+                floor.sensors.forEach(value => {
+                    ctx.fillStyle = '#333333';
+                    ctx.beginPath();
+                    ctx.arc(value.location.x * canvasState.scale + (floor.location.x + building.location.x + canvasState.offSetX), value.location.y * canvasState.scale + (floor.location.y + building.location.y + canvasState.offSetY), 10, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.closePath()
+
+                })
+            }
+
         })
     })
 

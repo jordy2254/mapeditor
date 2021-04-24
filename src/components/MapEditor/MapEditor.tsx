@@ -127,9 +127,11 @@ const MapEditor:React.FC<Props> = ({selectedMapId, handleClearSelectedMap}) =>{
         mutationFn: indentId => tokenWrapper4(deleteIndent, indentId),
         onSuccess: (data, variables, context) => {
             queryClient.invalidateQueries('API')
+        },
+        onError: (error1, variables) => {
+            console.log("Error")
         }
     })
-
 
     if(isLoading || mapData === undefined){
         return <div>Loading...</div>
